@@ -4,7 +4,7 @@
 
 _Log errors the smart way — whether you're using Azure, Firebase, or just the console._
 
-<img alt="GitHub package.json version (main)" src="https://img.shields.io/github/package-json/v/eriksturesson/cloud-logger/main">
+<img alt="GitHub package.json version (master)" src="https://img.shields.io/github/package-json/v/eriksturesson/cloud-logger/master">
 <img alt="npm" src="https://img.shields.io/npm/dy/cloud-logger?label=npm%20downloads">
 
 </center>
