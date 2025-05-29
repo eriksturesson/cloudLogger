@@ -1,20 +1,18 @@
 <center>
 
-# cloudlog
+# easify-logger
 
 _Log errors the smart way — whether you're using Azure, Firebase, or just the console._
 
-<center>
-
 <img alt="GitHub package.json version (master)" src="https://img.shields.io/github/package-json/v/eriksturesson/cloud-logger/master">
-<img alt="npm" src="https://img.shields.io/npm/dy/cloudlog?label=npm%20downloads">
+<img alt="npm" src="https://img.shields.io/npm/dy/easify-logger?label=npm%20downloads">
 
 </center>
 
 ---
 
 ```
-npm install cloud-logger
+npm install easify-logger
 ```
 
 ## ☁️ Platform-aware logging
@@ -27,7 +25,7 @@ You can:
 - Or use the `getSmartLogger()` that automatically picks based on your `.env` config
 
 ```ts
-import { AppError, getSmartLogger } from "cloud-logger";
+import { AppError, getSmartLogger } from "easify-logger";
 
 const logger = getSmartLogger(); // Chooses based on available env vars
 
