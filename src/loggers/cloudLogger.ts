@@ -1,24 +1,22 @@
-import { loggerForAzure } from "./loggerForAzure";
+import dotenv from "dotenv";
+import { initTelemetry, loggerForAzure } from "./loggerForAzure";
 import { loggerForFirebase } from "./loggerForFirebase";
 
-function isAzureFunction(): boolean {
-  return typeof (globalThis as any).context?.log === "function";
-}
-
-function isFirebaseFunction(): boolean {
-  return (
-    typeof (globalThis as any).functions !== "undefined" &&
-    typeof (globalThis as any).functions.logger?.log === "function"
-  );
-}
+dotenv.config();
 
 function getLogger() {
-  if (isAzureFunction()) {
+  const azureConnectionString = process.env.APPINSIGHTS_CONNECTIONSTRING;
+  const useFirebaseLogging = process.env.USE_FIREBASE_LOGGING === "true";
+
+  if (azureConnectionString) {
+    initTelemetry(azureConnectionString);
     return loggerForAzure();
   }
-  if (isFirebaseFunction()) {
+
+  if (useFirebaseLogging) {
     return loggerForFirebase();
   }
+
   return {
     log: (...args: any[]) => {
       console.log(...args);

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.6] - 2025-05-30
+
+### Changed
+
+- Removed reliance on `globalThis.context` for Azure logging.
+- Logging now depends on presence of `.env` variable `APPINSIGHTS_CONNECTIONSTRING` for initializing Azure Application Insights and `USE_FIREBASE_LOGGING` for Firebase logging.
+- `smartCloudLog` now auto-selects logger based on `.env` configuration instead of runtime environment detection.
+
 ## [0.0.5] - 2025-05-30
 
 ## [0.0.4] - 2025-05-30

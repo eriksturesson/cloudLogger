@@ -15,6 +15,25 @@ _Log errors the smart way — whether you're using Azure, Firebase, or just the 
 npm install smart-cloud-log
 ```
 
+## ⚠️ Required environment variables
+
+To enable platform-specific logging, make sure to set the appropriate environment variables in your `.env` file:
+
+```ts
+# For Azure Application Insights logging
+APPINSIGHTS_CONNECTIONSTRING=Your_Azure_Connection_String
+
+# For Firebase-based environments (optional, for future extensibility)
+FIREBASE_CONNECTION_STRING=placeholder_or_relevant_value
+```
+
+If neither variable is present, the logger will default to standard `console.log`.
+
+> ✅ `APPINSIGHTS_CONNECTIONSTRING` is **required** for Azure logging to work.  
+> 🔥 `FIREBASE_CONNECTION_STRING` is optional — logging to console works seamlessly in Firebase Functions.
+
+---
+
 ## ☁️ Platform-aware logging
 
 Use a logger that adapts to your environment: Console, Azure, or Firebase.

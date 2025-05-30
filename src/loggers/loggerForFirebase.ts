@@ -4,9 +4,7 @@ import type { Logger } from "../interfaces/Logger";
 
 function smartLogger(level: "info" | "warning" | "error" | "critical", message: string, data?: any) {
   const logFn =
-    typeof (globalThis as any).context?.log === "function"
-      ? (globalThis as any).context.log
-      : (console as any)[level === "warning" ? "warn" : level] || console.log;
+    level === "warning" ? console.warn : level === "error" || level === "critical" ? console.error : console.log;
 
   logFn(`[${level.toUpperCase()}] ${message}`);
   if (data) {

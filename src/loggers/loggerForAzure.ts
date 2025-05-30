@@ -2,20 +2,53 @@ import { AppError } from "../core/AppError";
 import { CustomLog } from "../interfaces/LogTypes";
 import type { Logger } from "../interfaces/Logger";
 
+import { TelemetryClient } from "applicationinsights";
+
 type LogSeverity = "info" | "warning" | "error" | "critical";
 
-function smartLogger(level: LogSeverity, message: string, data?: any) {
-  const logFn =
-    typeof (globalThis as any).context?.log === "function"
-      ? (globalThis as any).context.log
-      : (console as any)[level === "warning" ? "warn" : level] || console.log;
+let telemetryClient: TelemetryClient | null = null;
 
-  logFn(`[${level.toUpperCase()}] ${message}`);
-  if (data) {
-    try {
-      logFn(`→ Data: ${JSON.stringify(data, null, 2)}`);
-    } catch {
-      logFn("→ Data: [Unserializable]");
+export function initTelemetry(connectionString?: string) {
+  if (connectionString) {
+    telemetryClient = new TelemetryClient(connectionString);
+  } else {
+    telemetryClient = null;
+  }
+}
+
+function mapSeverity(level: LogSeverity): string {
+  switch (level) {
+    case "info":
+      return "Information";
+    case "warning":
+      return "Warning";
+    case "error":
+      return "Error";
+    case "critical":
+      return "Critical";
+    default:
+      return "Information";
+  }
+}
+
+function smartLogger(level: LogSeverity, message: string, data?: any) {
+  if (telemetryClient) {
+    telemetryClient.trackTrace({
+      message,
+      severity: mapSeverity(level),
+      properties: data,
+    });
+  } else {
+    // fallback till vanlig console-logging
+    const logFn = (console as any)[level === "warning" ? "warn" : level] || console.log;
+
+    logFn(`[${level.toUpperCase()}] ${message}`);
+    if (data) {
+      try {
+        logFn(`→ Data: ${JSON.stringify(data, null, 2)}`);
+      } catch {
+        logFn("→ Data: [Unserializable]");
+      }
     }
   }
 }

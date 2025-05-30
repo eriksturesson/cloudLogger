@@ -3,16 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.loggerForFirebase = void 0;
 var AppError_1 = require("../core/AppError");
 function smartLogger(level, message, data) {
-    var _a;
-    var logFn = typeof ((_a = globalThis.context) === null || _a === void 0 ? void 0 : _a.log) === "function"
-        ? globalThis.context.log
-        : console[level === "warning" ? "warn" : level] || console.log;
+    var logFn = level === "warning" ? console.warn : level === "error" || level === "critical" ? console.error : console.log;
     logFn("[".concat(level.toUpperCase(), "] ").concat(message));
     if (data) {
         try {
             logFn("\u2192 Data: ".concat(JSON.stringify(data, null, 2)));
         }
-        catch (_b) {
+        catch (_a) {
             logFn("→ Data: [Unserializable]");
         }
     }
