@@ -1,5 +1,5 @@
 import { AppError } from "../core/AppError";
-import { CustomLog } from "../interfaces/ErrorTypes";
+import { CustomLog } from "../interfaces/LogTypes";
 import type { Logger } from "../interfaces/Logger";
 
 type LogSeverity = "info" | "warning" | "error" | "critical";

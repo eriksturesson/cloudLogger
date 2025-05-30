@@ -1,4 +1,4 @@
-import { LogSeverity } from "../interfaces/ErrorTypes";
+import { LogSeverity } from "../interfaces/LogTypes";
 
 export class AppError extends Error {
   isOperational: boolean;

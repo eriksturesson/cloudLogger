@@ -1,20 +1,24 @@
 import { loggerForAzure } from "./loggerForAzure";
 import { loggerForFirebase } from "./loggerForFirebase";
 
-import dotenv from "dotenv";
-dotenv.config();
+function isAzureFunction(): boolean {
+  return typeof (globalThis as any).context?.log === "function";
+}
 
-const AZURE_APP_ID = process.env.AZURE_APP_ID;
-const FIREBASE_CONFIG = process.env.FIREBASE_CONFIG;
+function isFirebaseFunction(): boolean {
+  return (
+    typeof (globalThis as any).functions !== "undefined" &&
+    typeof (globalThis as any).functions.logger?.log === "function"
+  );
+}
 
 function getLogger() {
-  if (AZURE_APP_ID) {
+  if (isAzureFunction()) {
     return loggerForAzure();
   }
-  if (FIREBASE_CONFIG) {
+  if (isFirebaseFunction()) {
     return loggerForFirebase();
   }
-  // fallback logger som bara wrapper console.log
   return {
     log: (...args: any[]) => {
       console.log(...args);
