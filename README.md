@@ -5,7 +5,7 @@
 _Log errors the smart way — whether you're using Azure, Firebase, or just the console._
 
 <img alt="GitHub package.json version (master)" src="https://img.shields.io/github/package-json/v/eriksturesson/cloudLogger/master">
-<img alt="npm" src="https://img.shields.io/npm/dy/easify-logger?label=npm%20downloads">
+<img alt="npm" src="https://img.shields.io/npm/dy/smart-cloud-log?label=npm%20downloads">
 
 </center>
 

@@ -1,19 +1,19 @@
-export type LogSeverity = "info" | "warning" | "error" | "critical";
+import { LogSeverity } from "../interfaces/LogTypes";
 export declare class AppError extends Error {
-    statusCode: number;
     isOperational: boolean;
     showUser: boolean;
     severity: LogSeverity;
     code?: string | number;
-    constructor({ message, statusCode, isOperational, showUser, severity, code, }: {
+    data?: any;
+    constructor({ message, isOperational, showUser, severity, code, data, }: {
         message: string;
-        statusCode?: number;
         isOperational?: boolean;
         showUser?: boolean;
         severity?: LogSeverity;
         code?: string | number;
+        data?: any;
     });
-    static NotFound(message?: string): AppError;
-    static BadRequest(message?: string): AppError;
-    static Internal(message?: string): AppError;
+    static NotFound(message?: string, data?: any): AppError;
+    static BadRequest(message?: string, data?: any): AppError;
+    static Internal(message?: string, data?: any): AppError;
 }

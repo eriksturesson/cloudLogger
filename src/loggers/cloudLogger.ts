@@ -26,6 +26,6 @@ function getLogger() {
   };
 }
 
-const cloudLogger = getLogger();
+const smartCloudLog = getLogger();
 
-export default cloudLogger;
+export default smartCloudLog;

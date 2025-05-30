@@ -1,4 +1,4 @@
-declare const cloudLogger: {
+declare const smartCloudLog: {
     log: (...args: any[]) => void;
 };
-export default cloudLogger;
+export default smartCloudLog;

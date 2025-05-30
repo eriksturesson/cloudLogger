@@ -4,5 +4,5 @@ export { loggerForFirebase } from "./loggers/loggerForFirebase";
 
 export type { CustomLog } from "./interfaces/LogTypes";
 
-import cloudLogger from "./loggers/cloudLogger";
-export default cloudLogger;
+import smartCloudLog from "./loggers/cloudLogger";
+export default smartCloudLog;

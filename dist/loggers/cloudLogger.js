@@ -1,22 +1,23 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var loggerForAzure_1 = require("./loggerForAzure");
 var loggerForFirebase_1 = require("./loggerForFirebase");
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-var AZURE_APP_ID = process.env.AZURE_APP_ID;
-var FIREBASE_CONFIG = process.env.FIREBASE_CONFIG;
+function isAzureFunction() {
+    var _a;
+    return typeof ((_a = globalThis.context) === null || _a === void 0 ? void 0 : _a.log) === "function";
+}
+function isFirebaseFunction() {
+    var _a;
+    return (typeof globalThis.functions !== "undefined" &&
+        typeof ((_a = globalThis.functions.logger) === null || _a === void 0 ? void 0 : _a.log) === "function");
+}
 function getLogger() {
-    if (AZURE_APP_ID) {
+    if (isAzureFunction()) {
         return (0, loggerForAzure_1.loggerForAzure)();
     }
-    if (FIREBASE_CONFIG) {
+    if (isFirebaseFunction()) {
         return (0, loggerForFirebase_1.loggerForFirebase)();
     }
-    // fallback logger som bara wrapper console.log
     return {
         log: function () {
             var args = [];
@@ -27,5 +28,5 @@ function getLogger() {
         },
     };
 }
-var cloudLogger = getLogger();
-exports.default = cloudLogger;
+var smartCloudLog = getLogger();
+exports.default = smartCloudLog;
