@@ -1,21 +1,73 @@
+import { AppError } from "../core/AppError";
+import { CustomLog } from "../interfaces/ErrorTypes";
 import type { Logger } from "../interfaces/Logger";
 
-export function loggerForAzure(): Logger {
-  const appId = process.env.AZURE_APP_ID;
-  if (!appId) {
-    console.warn("AZURE_APP_ID missing, falling back to console.log");
+type LogSeverity = "info" | "warning" | "error" | "critical";
+
+function smartLogger(level: LogSeverity, message: string, data?: any) {
+  const logFn =
+    typeof (globalThis as any).context?.log === "function"
+      ? (globalThis as any).context.log
+      : (console as any)[level === "warning" ? "warn" : level] || console.log;
+
+  logFn(`[${level.toUpperCase()}] ${message}`);
+  if (data) {
+    try {
+      logFn(`→ Data: ${JSON.stringify(data, null, 2)}`);
+    } catch {
+      logFn("→ Data: [Unserializable]");
+    }
+  }
+}
+
+function formatLogEntry(input: unknown): {
+  message: string;
+  level: LogSeverity;
+  data?: any;
+} {
+  if (typeof input === "string") {
+    return { message: input, level: "info" };
+  }
+
+  if (input instanceof AppError) {
     return {
-      log: (error: unknown) => console.log(error),
+      message: `AppError${input.code ? ` (${input.code})` : ""}: ${input.message}`,
+      level: input.severity,
+      data: input.data,
     };
   }
 
+  if (typeof input === "object" && input !== null && "message" in input) {
+    const log = input as CustomLog;
+    return {
+      message: `${log.message}${log.code ? ` (Code ${log.code})` : ""}`,
+      level: log.severity ?? "info",
+      data: log.data,
+    };
+  }
+
+  try {
+    return {
+      message: JSON.stringify(input),
+      level: "info",
+    };
+  } catch {
+    return {
+      message: "Unknown error (unserializable input)",
+      level: "error",
+    };
+  }
+}
+
+export function loggerForAzure(): Logger {
   return {
-    log: (error: unknown) => {
+    log: (entry: unknown) => {
       try {
-        // Logga till Azure med appId
+        const { message, level, data } = formatLogEntry(entry);
+        smartLogger(level, message, data);
       } catch (e) {
-        console.warn("Azure logging failed, fallback to console.log");
-        console.log(error);
+        smartLogger("warning", "Logging failed, fallback to console");
+        console.error(entry);
       }
     },
   };

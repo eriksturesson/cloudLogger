@@ -1,6 +1,8 @@
-export interface CustomError {
+export type LogSeverity = "info" | "warning" | "error" | "critical";
+export interface CustomLog {
+  message: string;
   code?: string | number;
   status?: string | number;
-  message?: string;
-  severity?: "info" | "warning" | "error" | "critical";
+  severity?: LogSeverity;
+  data?: any;
 }

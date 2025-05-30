@@ -1,49 +1,49 @@
-export type LogSeverity = "info" | "warning" | "error" | "critical";
+import { LogSeverity } from "../interfaces/ErrorTypes";
 
 export class AppError extends Error {
-  statusCode: number;
   isOperational: boolean;
   showUser: boolean;
   severity: LogSeverity;
   code?: string | number;
+  data?: any;
 
   constructor({
     message,
-    statusCode = 500,
     isOperational = true,
     showUser = false,
     severity = "error",
     code,
+    data,
   }: {
     message: string;
-    statusCode?: number;
     isOperational?: boolean;
     showUser?: boolean;
     severity?: LogSeverity;
     code?: string | number;
+    data?: any;
   }) {
     super(message);
 
     this.name = "AppError";
-    this.statusCode = statusCode;
     this.isOperational = isOperational;
     this.showUser = showUser;
     this.severity = severity;
     this.code = code;
+    this.data = data;
 
     Object.setPrototypeOf(this, new.target.prototype);
     Error.captureStackTrace(this);
   }
 
-  static NotFound(message = "Not Found") {
-    return new AppError({ message, statusCode: 404, showUser: true });
+  static NotFound(message = "Not Found", data?: any) {
+    return new AppError({ message, code: 404, showUser: true, data });
   }
 
-  static BadRequest(message = "Bad Request") {
-    return new AppError({ message, statusCode: 400, showUser: true });
+  static BadRequest(message = "Bad Request", data?: any) {
+    return new AppError({ message, code: 400, showUser: true, data });
   }
 
-  static Internal(message = "Internal Server Error") {
-    return new AppError({ message, statusCode: 500 });
+  static Internal(message = "Internal Server Error", data?: any) {
+    return new AppError({ message, code: 500, data });
   }
 }
