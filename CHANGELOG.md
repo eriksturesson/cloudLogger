@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.9] - 2025-05-30
+
+### Changed
+
+- Trying to fix the issue in v.0.0.8 by installing pg, pg types and node types
+
 ## [0.0.8] - 2025-05-30
 
 ### Changed
