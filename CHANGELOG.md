@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.8] - 2025-05-30
+
+### Changed
+
+- When the npm package is used, there seem to be an error, installing firebase-admin to see if it is a dependency for firebase.
+
+```ts
+node_modules/@types/pg/index.d.ts:12:31 - error TS2307: Cannot find module 'pg-protocol/dist/messages' or its corresponding type declarations.
+
+12 import { NoticeMessage } from 'pg-protocol/dist/messages';
+```
+
 ## [0.0.7] - 2025-05-30
 
 ### Changed

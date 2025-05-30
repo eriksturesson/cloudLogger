@@ -3,7 +3,7 @@ export declare class AppError extends Error {
     isOperational: boolean;
     showUser: boolean;
     severity: LogSeverity;
-    code?: string | number;
+    code?: number;
     data?: any;
     constructor({ message, isOperational, showUser, severity, code, data }: AppErrorOptions);
     static NotFound(message?: string, data?: any): AppError;
