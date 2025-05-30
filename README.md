@@ -93,7 +93,7 @@ app.get("/user/:id", async (req, res, next) => {
 
 ```ts
 import { AppError } from "smart-cloud-log";
-import logger from "smart-cloud-log";
+import smartCloudLog from "smart-cloud-log";
 
 app.get("/user/:id", async (req, res, next) => {
   try {
@@ -101,7 +101,7 @@ app.get("/user/:id", async (req, res, next) => {
     if (!user) throw AppError.NotFound("User not found");
     res.json(user);
   } catch (err) {
-    logger.log(err);
+    smartCloudLog.log(err);
 
     // If showUser is true, it is safe to send the error to the client (frontend)
     if (err instanceof AppError && err.showUser) {

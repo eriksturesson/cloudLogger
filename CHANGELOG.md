@@ -2,19 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.5] - 2025-05-30
+
 ## [0.0.4] - 2025-05-30
-
-### Changed
-
-- More exported interfaces
-- README has examples of showUser usage
 
 ## [0.0.3] - 2025-05-30
 
 ### Changed
 
 - More exported interfaces
-- README changed and with more examples
+- README has examples of showUser usage
 
 ## [0.0.2] - 2025-05-30
 
