@@ -4,7 +4,7 @@ export class AppError extends Error {
   public isOperational: boolean;
   public showUser: boolean;
   public severity: LogSeverity;
-  public code?: string | number;
+  public code?: number;
   public data?: any;
 
   constructor({ message, isOperational = true, showUser = false, severity = "error", code, data }: AppErrorOptions) {

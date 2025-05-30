@@ -150,7 +150,7 @@ const logEntry: CustomLog = {
 
 ```ts
 export interface CustomLog {
-  code?: string | number;
+  code?: number;
   status?: string | number;
   message?: string;
   severity?: "info" | "warning" | "error" | "critical";
@@ -168,7 +168,7 @@ export interface AppErrorOptions {
   isOperational?: boolean;
   showUser?: boolean;
   severity?: LogSeverity;
-  code?: string | number;
+  code?: number;
   data?: any;
 }
 ```
