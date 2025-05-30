@@ -1,27 +1,13 @@
-import { LogSeverity } from "../interfaces/LogTypes";
+import { AppErrorOptions, LogSeverity } from "../interfaces/LogTypes";
 
 export class AppError extends Error {
-  isOperational: boolean;
-  showUser: boolean;
-  severity: LogSeverity;
-  code?: string | number;
-  data?: any;
+  public isOperational: boolean;
+  public showUser: boolean;
+  public severity: LogSeverity;
+  public code?: string | number;
+  public data?: any;
 
-  constructor({
-    message,
-    isOperational = true,
-    showUser = false,
-    severity = "error",
-    code,
-    data,
-  }: {
-    message: string;
-    isOperational?: boolean;
-    showUser?: boolean;
-    severity?: LogSeverity;
-    code?: string | number;
-    data?: any;
-  }) {
+  constructor({ message, isOperational = true, showUser = false, severity = "error", code, data }: AppErrorOptions) {
     super(message);
 
     this.name = "AppError";

@@ -6,3 +6,12 @@ export interface CustomLog {
   severity?: LogSeverity;
   data?: any;
 }
+
+export interface AppErrorOptions {
+  message: string;
+  isOperational?: boolean;
+  showUser?: boolean;
+  severity?: LogSeverity;
+  code?: string | number;
+  data?: any;
+}

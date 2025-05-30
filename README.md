@@ -22,17 +22,16 @@ Use a logger that adapts to your environment: Console, Azure, or Firebase.
 You can:
 
 - Import a specific logger like `loggerForAzure`, `loggerForFirebase`, or `loggerForConsole`
-- Or use the `getSmartLogger()` that automatically picks based on your `.env` config
+- Or just use the default export `smartCloudLog` which automatically picks the right logger based on your environment
 
 ```ts
-import { AppError, getSmartLogger } from "smart-cloud-log";
-
-const logger = getSmartLogger(); // Chooses based on available env vars
+import { AppError } from "smart-cloud-log";
+import smartCloudLog from "smart-cloud-log";
 
 try {
   throw AppError.NotFound("User not found");
 } catch (err) {
-  logger.log(err); // Logs to correct platform
+  smartCloudLog.log(err); // Logs to correct platform
   next(err); // Pass to Express error handler
 }
 ```
@@ -47,11 +46,26 @@ Use `AppError` for standardized backend-to-frontend error flow:
 throw AppError.BadRequest("Missing required fields");
 ```
 
+Or construct it manually for full control:
+
+```ts
+const error = new AppError({
+  message: "Something went terribly wrong",
+  severity: "critical",
+  showUser: true,
+  code: 500,
+  data: { context: "PaymentService", id: 12345 },
+});
+```
+
 Properties available:
 
-- `statusCode`: HTTP status code
+- `message`: The error message
+- `code`: HTTP status code
 - `isOperational`: Marks it as a handled error (vs. crash)
 - `showUser`: Whether frontend should show the message
+- `severity`: "info" | "warning" | "error" | "critical"
+- `data`: Additional metadata (optional and anything accepted)
 
 You can extend it for custom domains too.
 
@@ -60,9 +74,26 @@ You can extend it for custom domains too.
 ## 🧠 Example: With Express
 
 ```ts
-import { AppError, loggerForConsole } from "cloud-logger";
+import { AppError } from "smart-cloud-log";
+import smartCloudLog from "smart-cloud-log";
 
-const logger = loggerForConsole();
+app.get("/user/:id", async (req, res, next) => {
+  try {
+    const user = null;
+    if (!user) throw AppError.NotFound("User not found");
+    res.json(user);
+  } catch (err) {
+    smartCloudLog.log(err);
+    next(err);
+  }
+});
+```
+
+## 🧠 Example: With Express + showUser handling
+
+```ts
+import { AppError } from "smart-cloud-log";
+import logger from "smart-cloud-log";
 
 app.get("/user/:id", async (req, res, next) => {
   try {
@@ -71,37 +102,27 @@ app.get("/user/:id", async (req, res, next) => {
     res.json(user);
   } catch (err) {
     logger.log(err);
-    next(err);
+
+    // If showUser is true, it is safe to send the error to the client (frontend)
+    if (err instanceof AppError && err.showUser) {
+      res.status(err.code ?? 400).json({ error: err.message });
+    } else {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    next(err); // Optional
   }
 });
 ```
 
----
-
-## ✅ Environment support for `getSmartLogger`
-
-```env
-# Firebase
-FIREBASE_PROJECT_ID=...
-
-# Azure
-AZURE_CONNECTION_STRING=...
-
-# Fallback: console only
-```
-
-If no cloud credentials are found, it falls back to console logger **and shows a warning**.
-
----
-
 ## 🧩 Types
 
-Use `CustomError` when throwing non-Error objects:
+Use `CustomLog` when throwing non-Error objects:
 
 ```ts
-import type { CustomError } from "cloud-logger";
+import type { CustomLog } from "smart-cloud-log";
 
-const error: CustomError = {
+const logEntry: CustomLog = {
   code: 400,
   message: "Something went wrong",
   severity: "warning",
@@ -109,11 +130,27 @@ const error: CustomError = {
 ```
 
 ```ts
-export interface CustomError {
+export interface CustomLog {
   code?: string | number;
   status?: string | number;
   message?: string;
   severity?: "info" | "warning" | "error" | "critical";
+  data?: any;
+}
+```
+
+```ts
+export type LogSeverity = "info" | "warning" | "error" | "critical";
+```
+
+```ts
+export interface AppErrorOptions {
+  message: string;
+  isOperational?: boolean;
+  showUser?: boolean;
+  severity?: LogSeverity;
+  code?: string | number;
+  data?: any;
 }
 ```
 
